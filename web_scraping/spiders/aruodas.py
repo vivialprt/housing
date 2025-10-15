@@ -1,5 +1,4 @@
 from enum import StrEnum
-from logging import getLogger
 import scrapy
 
 
