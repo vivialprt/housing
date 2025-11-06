@@ -52,6 +52,9 @@ class AruodasSpider(scrapy.Spider):
     def parse_ad(self, r):
         city, district, street, obj_type = r.css('.obj-header-text::text').get().strip().split(', ')
 
+        sold = r.css('.adv-sold1-en').get() is not None
+        
+
         project_name_raw = r.css('.project-in__title::text').get()
         project_name = project_name_raw.strip()[1:-1] if project_name_raw else None
         project_link = r.follow(r.css('a.project-in__button::attr(href)').get()).url if project_name_raw else None
@@ -82,6 +85,7 @@ class AruodasSpider(scrapy.Spider):
             'district': district,
             'street': street,
             'obj_type': obj_type,
+            'sold': sold,
             'project_name': project_name,
             'project_link': project_link,
             'project_developer_link': project_developer_link,
