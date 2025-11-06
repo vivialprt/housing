@@ -19,3 +19,8 @@ DEFAULT_REQUEST_HEADERS = {
     "Sec-Fetch-Mode": "no-cors",
     "Sec-Fetch-Site": "same-origin",
 }
+
+# Breadth-first settings
+DEPTH_PRIORITY = 1
+SCHEDULER_DISK_QUEUE = "scrapy.squeues.PickleFifoDiskQueue"
+SCHEDULER_MEMORY_QUEUE = "scrapy.squeues.FifoMemoryQueue"
