@@ -11,6 +11,19 @@
                 "${file}"
             ],
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: Launch Scrapy Spider",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "scrapy",
+            "args": [
+                "runspider",
+                "${file}",
+                "-a",
+                "since=05112025"
+            ],
+            "console": "integratedTerminal"
         }
     ]
 }
