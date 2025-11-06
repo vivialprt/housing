@@ -1,4 +1,5 @@
 from enum import StrEnum
+from datetime import datetime, timedelta
 import scrapy
 
 
@@ -13,7 +14,12 @@ class PropertyPrefix(StrEnum):
 class AruodasSpider(scrapy.Spider):
     name = "aruodas"
     allowed_domains = ["en.aruodas.lt"]
-    start_urls = ["https://en.aruodas.lt/butai/vilniuje/"]
+    start_urls = ["https://en.aruodas.lt/butai/vilniuje/?FOrder=AddDate"]
+
+    def __init__(self, since=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.since = datetime.strptime(since, "%d%m%Y") if since else None
+        self.reached_old = False
 
     def parse(self, r):
         standalone_links = r.css(
@@ -30,7 +36,7 @@ class AruodasSpider(scrapy.Spider):
         for link in project_links:
             yield r.follow(link, callback=self.parse_project)
 
-        if next_page_text == "»":
+        if next_page_text == "»" and not self.reached_old:
             yield next_page
 
     def parse_project(self, r):
@@ -100,6 +106,8 @@ class AruodasSpider(scrapy.Spider):
 
         stats_raw = {k: v for k, v in zip(stats_dt, stats_dd)}
 
+        self._check_if_reached_old(stats_raw)
+
         yield {
             "city": city,
             "district": district,
@@ -118,3 +126,15 @@ class AruodasSpider(scrapy.Spider):
             "stats_raw": stats_raw,
             "url": r.url,
         }
+
+    def _check_if_reached_old(self, stats_raw):
+        if self.since is None:
+            return
+
+        created_str = stats_raw.get("Created")
+        if created_str is None:
+            return
+
+        created_date = datetime.strptime(created_str, "%Y-%m-%d")
+        if created_date < self.since:
+            self.reached_old = True
