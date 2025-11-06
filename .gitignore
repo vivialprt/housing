@@ -94,3 +94,8 @@ crawls/
 
 # data
 *.jsonl
+
+# terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
