@@ -21,7 +21,9 @@
                 "runspider",
                 "${file}",
                 "-a",
-                "since=05112025"
+                "since=auto",
+                "-a",
+                "debug=True"
             ],
             "console": "integratedTerminal"
         }
