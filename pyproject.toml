@@ -17,6 +17,7 @@ dataanalysis = [
     "ruff>=0.14.5",
 ]
 scraping = [
+    "boto3>=1.41.2",
     "scrapy>=2.13.4",
 ]
 
