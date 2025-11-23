@@ -41,4 +41,4 @@ USER nonroot
 WORKDIR /app
 
 # Run scrapy crawl by default
-CMD ["scrapy", "crawl", "aruodas", "-a", "since=20112025", "-o", "ads.jsonl"]
+CMD ["scrapy", "crawl", "aruodas", "-a", "since=auto"]
