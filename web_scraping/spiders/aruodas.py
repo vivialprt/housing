@@ -18,27 +18,21 @@ class AruodasSpider(scrapy.Spider):
     name = "aruodas"
     allowed_domains = ["en.aruodas.lt"]
     start_urls = ["https://en.aruodas.lt/butai/vilniuje/?FOrder=AddDate"]
+    custom_settings = {
+        "FEEDS": {
+            f"S3://{os.environ["OUTPUT_BUCKET"]}/{os.environ["OUTPUT_PREFIX"]}/{datetime.now().strftime("%d%m%Y")}.jsonl": {
+                "format": "jsonlines"
+            },
+            f"{datetime.now().strftime("%d%m%Y")}.jsonl": {
+                "format": "jsonlines"
+            },
+        }
+    }
 
     def __init__(self, since=None, debug=False, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.debug = True if debug == "True" else False
-
-        # S3 configuration
-        self.s3_bucket = os.getenv("OUTPUT_BUCKET", None)
-        self.s3_prefix = os.getenv("OUTPUT_KEY_PREFIX", None)
-        self.aws_sso_profile = os.getenv("AWS_SSO_PROFILE", None)
-
-        if not self.debug:
-            if self.s3_bucket is None:
-                raise RuntimeError("OUTPUT_BUCKET environment variable is not set")
-            if self.s3_prefix is None:
-                raise RuntimeError("OUTPUT_KEY_PREFIX environment variable is not set")
-            if self.aws_sso_profile is None:
-                raise RuntimeError("AWS_SSO_PROFILE environment variable is not set")
-
-        boto3.setup_default_session(profile_name=self.aws_sso_profile)
-        self.s3 = boto3.client("s3")
 
         # Determine since date
         match since:
@@ -172,11 +166,13 @@ class AruodasSpider(scrapy.Spider):
     def _get_last_date_from_s3(self):
         if self.debug:
             return datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        s3 = boto3.client("s3")
         try:
-            meta_file = self.s3.get_object(
-                Bucket=self.s3_bucket, Key=f"{self.s3_prefix}/crawl_meta.json"
+            meta_file = s3.get_object(
+                Bucket=os.environ["OUTPUT_BUCKET"],
+                Key=f"{os.environ["OUTPUT_PREFIX"]}/crawl_meta.json"
             )
-        except self.s3.exceptions.NoSuchKey:
+        except s3.exceptions.NoSuchKey:
             raise RuntimeError(f"No crawl metadata found in specified S3 location")
         meta = json.loads(meta_file["Body"].read().decode("utf-8"))
         last_crawl_date_str = meta["latest_crawl_date"]
