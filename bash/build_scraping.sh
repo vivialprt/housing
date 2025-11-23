@@ -1,0 +1,1 @@
+docker build -f web_scraping/Dockerfile -t aruodas .
