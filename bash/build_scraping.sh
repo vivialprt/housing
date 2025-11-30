@@ -1,1 +1,1 @@
-docker build -f web_scraping/Dockerfile -t aruodas .
+docker build -f web_scraping/Dockerfile -t $JOB_REPO_URL .

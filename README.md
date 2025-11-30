@@ -7,5 +7,6 @@
 `eval "$(aws configure export-credentials --profile $AWS_SSO_PROFILE --format env)"`
 
 # Terraform
-- Login to AWS `aws sso login --profile "terraform"`
+- Login to AWS and set env vars `source bash/setup_aws.sh`
 - Init terraform `terraform init -backend-config=backend/backend-dev.hcl`
+- Set \$JOB_REPO_URL `export JOB_REPO_URL=$(terraform output --raw {job_name})`
