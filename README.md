@@ -9,4 +9,4 @@
 # Terraform
 - Login to AWS and set env vars `source bash/setup_aws.sh`
 - Init terraform `terraform init -backend-config=backend/backend-dev.hcl`
-- Set \$JOB_REPO_URL `export JOB_REPO_URL=$(terraform output --raw {job_name})`
+- Set \$WEB_SCRAPING_REPO_URL `export WEB_SCRAPING_REPO_URL=$(terraform output --raw web_scraping_repo_url)`

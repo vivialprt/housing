@@ -1,15 +1,15 @@
-resource "aws_ecr_repository" "aruodas_vilnius_appartments_incremental" {
-  name = "aruodas_vilnius_appartments_incremental"
+resource "aws_ecr_repository" "web_scraping" {
+  name = "web_scraping"
 
   tags = {
     "L2" = "ETL",
     "L3" = "container_registry",
     Environment = var.env
-    Name = "aruodas_vilnius_appartments_incremental"
+    Name = "web_scraping"
   }
 }
 
-output "aruodas_vilnius_appartments_incremental_repo_url" {
-  description = "URL of the ECR repository"
-  value       = aws_ecr_repository.aruodas_vilnius_appartments_incremental.repository_url
+output "web_scraping_repo_url" {
+  description = "URL of the web scraping ECR repository"
+  value       = aws_ecr_repository.web_scraping.repository_url
 }

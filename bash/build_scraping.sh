@@ -1,1 +1,1 @@
-docker build -f web_scraping/Dockerfile -t $JOB_REPO_URL .
+docker build -f web_scraping/Dockerfile -t $WEB_SCRAPING_REPO_URL .
