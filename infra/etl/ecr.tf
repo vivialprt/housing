@@ -1,20 +1,15 @@
-resource "aws_ecr_repository" "etl_repository" {
-  name = "etl-repository-${var.ecr_postfix}"
+resource "aws_ecr_repository" "aruodas_vilnius_appartments_incremental" {
+  name = "aruodas_vilnius_appartments_incremental"
 
   tags = {
     "L2" = "ETL",
     "L3" = "container_registry",
     Environment = var.env
-    Name = "etl-repository"
+    Name = "aruodas_vilnius_appartments_incremental"
   }
 }
 
-output "ecr_repository_url" {
+output "aruodas_vilnius_appartments_incremental_repo_url" {
   description = "URL of the ECR repository"
-  value       = aws_ecr_repository.etl_repository.repository_url
-}
-
-output "ecr_repository_name" {
-  description = "ARN of the ECR repository"
-  value       = aws_ecr_repository.etl_repository.name
+  value       = aws_ecr_repository.aruodas_vilnius_appartments_incremental.repository_url
 }
