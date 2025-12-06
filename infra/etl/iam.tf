@@ -1,14 +1,30 @@
-# resource "aws_iam_role" "eventbridge_role" {
-#   name = "eventbridge-role"
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [{
-#       Effect    = "Allow"
-#       Principal = { Service = "events.amazonaws.com" }
-#       Action    = "sts:AssumeRole"
-#     }]
-#   })
-# }
+resource "aws_iam_role" "eventbridge_role" {
+  name = "eventbridge-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Service = "events.amazonaws.com" }
+      Action    = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "eventbridge_ecs_policy" {
+    name = "eventbridge-policy"
+    role = aws_iam_role.eventbridge_role.id
+    
+    policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [{
+        Effect   = "Allow"
+        Action   = [
+            "ecs:RunTask"
+        ]
+        Resource = "*"
+        }]
+    })
+}
 
 resource "aws_iam_role" "ecs_task_role" {
   name = "ecs-task-role"
