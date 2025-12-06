@@ -1,7 +1,3 @@
-data "aws_vpc" "default" {
-  default = true
-}
-
 resource "aws_security_group" "ecs_tasks_sg" {
   name        = "ecs-tasks-sg"
   description = "Security group for ECS tasks"
