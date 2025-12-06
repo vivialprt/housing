@@ -61,3 +61,29 @@ variable "env" {
     description = "Deployment environment (e.g., dev, prod)"
     type        = string
 }
+
+variable "task_subnets" {
+    description = "List of subnet IDs for the ECS task"
+    type        = list(string)
+
+}
+
+variable "task_security_group" {
+    description = "Security group ID for the ECS task"
+    type        = string
+}
+
+variable "task_cluster_arn" {
+    description = "ECS Cluster ARN where the task will run"
+    type        = string
+}
+
+variable "task_schedule" {
+    description = "Schedule expression for the ECS task (e.g., cron or rate)"
+    type        = string
+}
+
+variable "eventbridge_role_arn" {
+    description = "The ARN of the IAM role that EventBridge will assume to run the ECS task"
+    type        = string
+}

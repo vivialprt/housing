@@ -39,4 +39,42 @@ resource "aws_ecs_task_definition" "task" {
 resource "aws_cloudwatch_log_group" "log_group" {
     name              = "/ecs/${var.ecs_task_family}"
     retention_in_days = var.log_retention_days
+
+    tags = {
+        "L2" = "ETL",
+        "L3" = "ecs_task_logs",
+        Environment = var.env
+        Name = "${var.ecs_task_family}-logs"
+    }
+}
+
+resource "aws_cloudwatch_event_rule" "ecs_task_schedule" {
+    name                = "${var.ecs_task_family}-trigger"
+    description         = "Schedule to run ECS task ${var.ecs_task_family}"
+    schedule_expression = var.task_schedule
+
+    tags = {
+        "L2" = "ETL",
+        "L3" = "eventbridge_rule",
+        Environment = var.env
+        Name = "${var.ecs_task_family}-schedule"
+    }
+}
+
+resource "aws_cloudwatch_event_target" "ecs_task_eventbridge_target" {
+
+    arn      = var.task_cluster_arn
+    rule     = aws_cloudwatch_event_rule.ecs_task_schedule.name
+    role_arn = var.eventbridge_role_arn
+
+    ecs_target {
+        task_definition_arn = aws_ecs_task_definition.task.arn
+        launch_type         = "FARGATE"
+        network_configuration {
+            subnets         = var.task_subnets
+            security_groups = [var.task_security_group]
+            assign_public_ip = true
+        }
+        platform_version = "LATEST"
+    }
 }
