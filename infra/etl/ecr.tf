@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "web_scraping" {
-  name = "web_scraping"
+  name = "${var.env}-web-scraping"
 
   tags = {
     "L2" = "ETL",
