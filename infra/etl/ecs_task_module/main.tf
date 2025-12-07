@@ -49,7 +49,7 @@ resource "aws_cloudwatch_log_group" "log_group" {
 }
 
 resource "aws_cloudwatch_event_rule" "ecs_task_schedule" {
-    name                = "${var.ecs_task_family}-trigger"
+    name                = "${var.env}-${var.ecs_task_family}-trigger"
     description         = "Schedule to run ECS task ${var.ecs_task_family}"
     schedule_expression = var.task_schedule
 
