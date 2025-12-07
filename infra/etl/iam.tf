@@ -10,18 +10,27 @@ resource "aws_iam_role" "eventbridge_role" {
   })
 }
 
-resource "aws_iam_role_policy" "eventbridge_ecs_policy" {
+resource "aws_iam_role_policy" "eventbridge_role_policy" {
     name = "eventbridge-policy"
     role = aws_iam_role.eventbridge_role.id
     
     policy = jsonencode({
         Version = "2012-10-17"
         Statement = [{
-        Effect   = "Allow"
-        Action   = [
+          Effect   = "Allow"
+          Action   = [
+            "iam:PassRole"
+          ]
+          Resource = [
+            "arn:aws:iam::*:role/ecsTaskExecutionRole",
+            aws_iam_role.ecs_task_role.arn
+          ]
+        },{
+          Effect   = "Allow"
+          Action   = [
             "ecs:RunTask"
-        ]
-        Resource = "*"
+          ]
+          Resource = "*"
         }]
     })
 }
@@ -39,7 +48,7 @@ resource "aws_iam_role" "ecs_task_role" {
   })
 }
 
-resource "aws_iam_role_policy" "ecs_task_s3_policy" {
+resource "aws_iam_role_policy" "ecs_task_role_policy" {
     name = "ecs-task-s3-policy"
     role = aws_iam_role.ecs_task_role.id
     
