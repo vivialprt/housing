@@ -151,6 +151,10 @@ class AruodasSpider(scrapy.Spider):
             "url": r.url,
         }
 
+    def close(self, reason):
+        if reason == "finished":
+            self._set_last_date_to_s3()
+
     def _check_if_reached_old(self, stats_raw):
         if self.since is None:
             return
@@ -177,3 +181,16 @@ class AruodasSpider(scrapy.Spider):
         meta = json.loads(meta_file["Body"].read().decode("utf-8"))
         last_crawl_date_str = meta["latest_crawl_date"]
         return datetime.strptime(last_crawl_date_str, "%d%m%Y")
+
+    def _set_last_date_to_s3(self):
+        if self.debug:
+            return
+        s3 = boto3.client("s3")
+        meta = {
+            "latest_crawl_date": datetime.now().strftime("%d%m%Y")
+        }
+        s3.put_object(
+            Bucket=os.environ["OUTPUT_BUCKET"],
+            Key=f"{os.environ["OUTPUT_PREFIX"]}/crawl_meta.json",
+            Body=json.dumps(meta).encode("utf-8")
+        )
