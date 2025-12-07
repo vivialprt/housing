@@ -2,6 +2,10 @@ provider "aws" {
   region = "eu-central-1"
 }
 
+terraform {
+  backend "s3" {}
+}
+
 data "aws_caller_identity" "current" {}
 data "aws_vpc" "default" {
   default = true
