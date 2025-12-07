@@ -99,6 +99,9 @@ crawls/
 *.tfstate
 *.tfstate.backup
 .terraform/
+*.tfvars
+!example.tfvars
+secret.yml
 
 # drawio
 *.drawio.bkp
