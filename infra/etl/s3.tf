@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "etl_raw_layer" {
-  bucket   = "etl-raw-layer-${var.s3_postfix}"
+  bucket   = "${var.env}-etl-raw-layer-${var.s3_postfix}"
 
   tags = {
     "L2" = "ETL",
