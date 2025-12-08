@@ -25,6 +25,7 @@ Analytics for housing prices.
     - `docker build -f web_scraping/Dockerfile -t scraping .`
 3. Terraform Infra setup can be found in [Infra README](infra/README.md)
 4. Set `OUTPUT_BUCKET` and `OUTPUT_PREFIX` env vars (might be nonsense for local only)
+5. Create a `crawl_meta.json` based on `web_scraping/crawl_meta.json.example`, populate it with your values, and put it to `OUTPUT_BUCKET` in `OUTPUT_PREFIX` directory. 
 
 ## Run data scraping locally
 
