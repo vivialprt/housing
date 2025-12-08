@@ -41,4 +41,4 @@ USER nonroot
 WORKDIR /app
 
 # Run scrapy crawl by default
-CMD ["scrapy", "crawl", "aruodas", "-a", "since=auto"]
+CMD ["/app/web_scraping/run_auto.sh"]
