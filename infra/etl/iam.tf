@@ -1,5 +1,5 @@
 resource "aws_iam_role" "eventbridge_role" {
-  name = "eventbridge-role"
+  name = "eventbridge-role-${var.env}"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -11,7 +11,7 @@ resource "aws_iam_role" "eventbridge_role" {
 }
 
 resource "aws_iam_role_policy" "eventbridge_role_policy" {
-    name = "eventbridge-policy"
+    name = "eventbridge-policy-${var.env}"
     role = aws_iam_role.eventbridge_role.id
     
     policy = jsonencode({
@@ -36,7 +36,7 @@ resource "aws_iam_role_policy" "eventbridge_role_policy" {
 }
 
 resource "aws_iam_role" "ecs_task_role" {
-  name = "ecs-task-role"
+  name = "ecs-task-role-${var.env}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -49,7 +49,7 @@ resource "aws_iam_role" "ecs_task_role" {
 }
 
 resource "aws_iam_role_policy" "ecs_task_role_policy" {
-    name = "ecs-task-s3-policy"
+    name = "ecs-task-s3-policy-${var.env}"
     role = aws_iam_role.ecs_task_role.id
     
     policy = jsonencode({

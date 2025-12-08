@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "web_scraping" {
-    name = "web-scraping"
+    name = "web-scraping-${var.env}"
     tags = {
         "L2" = "ETL",
         "L3" = "container_cluster",
@@ -11,7 +11,7 @@ resource "aws_ecs_cluster" "web_scraping" {
 module "aruodas_vilnius_incremental_task" {
     source = "./ecs_task_module"
 
-    ecs_task_family    = "aruodas-vilnius-incremental"
+    ecs_task_family    = "aruodas-vilnius-incremental-${var.env}"
     task_schedule    = "cron(0 2 * * ? *)"
     ecs_container_environment = [
         {
