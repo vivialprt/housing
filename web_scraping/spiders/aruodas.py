@@ -125,10 +125,23 @@ class AruodasSpider(scrapy.Spider):
 
         decription = "".join(r.css(".obj-comment div::text").getall())
 
-        stats_dt = r.css(".obj-stats dt::text").getall()
-        stats_dd = r.css(".obj-stats dd::text").getall()
+        stats_raw = {}
+        if project_name:
+            for row in r.css(".project__advert-info__row"):
+                key = row.css(".project__advert-info__label ::text").get()
+                if key == "Saved":
+                    value = row.css(".project__advert-info__value ::text").getall()[1]
+                else:
+                    value = row.css(".project__advert-info__value ::text").get()
+                stats_raw[key.strip()] = value.strip()
 
-        stats_raw = {k: v for k, v in zip(stats_dt, stats_dd)}
+        else:
+            stats_dt = r.css(".obj-stats dt")
+            stats_dd = r.css(".obj-stats dd")
+            for dt, dd in zip(stats_dt, stats_dd):
+                key = dt.css("::text").get()
+                value = "".join(dd.css("::text").get())
+                stats_raw[key] = value
 
         self._check_if_reached_old(stats_raw)
 
