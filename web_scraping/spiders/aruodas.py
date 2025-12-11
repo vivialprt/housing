@@ -145,7 +145,7 @@ class AruodasSpider(scrapy.Spider):
 
         self._check_if_reached_old(stats_raw)
 
-        yield {
+        item = {
             "city": city,
             "district": district,
             "street": street,
@@ -163,6 +163,7 @@ class AruodasSpider(scrapy.Spider):
             "stats_raw": stats_raw,
             "url": r.url,
         }
+        yield item
 
     def close(self, reason):
         if reason == "finished":
