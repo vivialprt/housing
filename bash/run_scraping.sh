@@ -3,4 +3,4 @@ docker run -it --rm \
     -e OUTPUT_PREFIX=$OUTPUT_PREFIX \
     -e AWS_PROFILE=$AWS_PROFILE \
     -v ~/.aws:/home/nonroot/.aws \
-    scraping
+    $REPO_URL
