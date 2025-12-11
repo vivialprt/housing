@@ -113,15 +113,15 @@ class AruodasSpider(scrapy.Spider):
             "a.link-obj-thumb.vector-thumb-map::attr(href)"
         ).get()
 
-        details_dt = r.css("dl.obj-details dt::text").getall()
-        details_dd = [
-            selector.css("::text").getall() for selector in r.css("dl.obj-details dd")
-        ]
-
-        details_raw = {
-            key.replace(":", "").strip(): value
-            for key, value in zip(details_dt, details_dd)
-        }
+        details_raw = {}
+        details_dt = r.css("dl.obj-details dt")
+        details_dd = r.css("dl.obj-details dd")
+        for dt, dd in zip(details_dt, details_dd):
+            key = dt.css("::text").get().strip().replace(":", "")
+            if key == "Reklama/pasiūlymas":
+                continue
+            value = [v for value in dd.css("::text").getall() if (v := value.strip())]
+            details_raw[key] = value if len(value) > 1 else value[0]
 
         decription = "".join(r.css(".obj-comment div::text").getall())
 
