@@ -123,7 +123,7 @@ class AruodasSpider(scrapy.Spider):
             value = [v for value in dd.css("::text").getall() if (v := value.strip())]
             details_raw[key] = value if len(value) > 1 else value[0]
 
-        decription = "".join(r.css(".obj-comment div::text").getall())
+        description = "".join(r.css(".obj-comment div::text").getall())
 
         stats_raw = {}
         if project_name:
@@ -159,7 +159,7 @@ class AruodasSpider(scrapy.Spider):
             "price_per_m2_raw": price_per_m2_raw,
             "precise_address_link": precise_address_link,
             "details_raw": details_raw,
-            "decription": decription,
+            "description": description,
             "stats_raw": stats_raw,
             "url": r.url,
         }
